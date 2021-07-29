@@ -19,11 +19,23 @@ def login_user():
             return redirect(url_for('homepage'))
         else:
             flash("Not correct")
-    else:
-        flash("Please try again")
     return render_template('login.html', title='Login', form=form)
 
 
-@app.route('/admin')
-def admin():
-    return render_template("admin.html")
+@app.route('/admin', methods=['GET', 'POST'])
+def login_admin():
+    form = LoginForm()
+    if form.validate_on_submit():
+        if User.query.filter_by(username=form.username.data).first() == "Admin":
+            user = User.query.filter_by(username=form.username.data).first()
+            if user and user.password == form.password.data:
+                flask_login.login_user(user, remember=form.remember.data)
+                return redirect(url_for('homepage'))
+            else:
+                flash("Not correct")
+        else:
+            flash("You are not administartor")
+            return redirect(url_for('homepage'))
+
+    return render_template('admin.html', title='Login', form=form)
+

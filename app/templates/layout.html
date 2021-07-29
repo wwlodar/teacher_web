@@ -37,7 +37,11 @@
             </ul>
         </div>
             <div>
-                <a href="login"><button type="submit" class="btn btn-outline-success float-end">Zaloguj się</button></a>
+                {% if current_user.is_authenticated %}
+                    <a class="nav-item nav-link">Zalogowany jako {{current_user.username}}</a>
+                {% else %}
+                    <a href="login"><button type="submit" class="btn btn-outline-success float-end">Zaloguj się</button></a>
+                {% endif %}
             </div>
         </div>
         </nav>
