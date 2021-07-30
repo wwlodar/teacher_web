@@ -39,6 +39,7 @@
             <div>
                 {% if current_user.is_authenticated %}
                     <a class="nav-item nav-link">Zalogowany jako {{current_user.username}}</a>
+                    <a class="nav-item nav-link " href="logout">Wyloguj</a>
                 {% else %}
                     <a href="login"><button type="submit" class="btn btn-outline-success float-end">Zaloguj się</button></a>
                 {% endif %}
@@ -46,8 +47,15 @@
         </div>
         </nav>
     </header>
+    <div class="row">
+        <div class="col-3">
+        </div>
+        <div class="col-5">
+        {% block content %}{% endblock %}
+        </div>
+        <div class="col-4">
+        </div>
+    </div>
 
-
-{% block content %}{% endblock %}
 </body>
 </html>
