@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from app import app, db, bcrypt, Student, Teacher
-from app.forms import LoginForm, RegisterForm, User
+from app.forms import LoginForm, RegisterFormTeacher, RegisterFormStudent, User
 import flask_login
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -46,24 +46,32 @@ def login_admin():
 
     return render_template('admin.html', title='Login', form=form)
 
-@app.route('/register')
+@app.route('/register_teacher')
 @is_admin()
-def register():
+def register_teacher():
     if current_user.is_authenticated:
         return redirect(url_for('homepage'))
-    form = RegisterForm()
+    form = RegisterFormTeacher()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        if form.role.data == "Teacher":
-            user = Teacher(username=form.username.data, email=form.email.data, password=hashed_password)
-            db.session.add(user)
-            db.session.commit()
-            flash("Account was added")
-            return redirect(url_for('login_user'))
-        else:
-            user = Student(username=form.username.data, email=form.email.data, password=hashed_password)
-            db.session.add(user)
-            db.session.commit()
-            flash("Account was added")
-            return redirect(url_for('login_user'))
+        user = Teacher(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash("Account was added", "success")
+        return redirect(url_for('login_user'))
+    return render_template('register.html', title='Register', form=form)
+
+@app.route('/register_student')
+@is_admin()
+def register_student():
+    if current_user.is_authenticated:
+        return redirect(url_for('homepage'))
+    form = RegisterFormStudent()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = Student(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash("Account was added", "success")
+        return redirect(url_for('login_user'))
     return render_template('register.html', title='Register', form=form)
