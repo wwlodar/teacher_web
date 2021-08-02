@@ -7,7 +7,6 @@ from flask_wtf.csrf import CSRFProtect
 
 csrf = CSRFProtect()
 
-
 app = Flask(__name__, template_folder='templates')
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba544'
@@ -18,40 +17,51 @@ login_manager.login_message_category = 'info'
 bcrypt = Bcrypt()
 csrf.init_app(app)
 
-
 db = SQLAlchemy(app)
 
+
 class User(db.Model, UserMixin):
-    __tablename__ = "user"
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
+	__tablename__ = "user"
+	id = db.Column(db.Integer, primary_key=True)
+	email = db.Column(db.String(120), unique=True, nullable=False)
+	password = db.Column(db.String(60), nullable=False)
 
 
 association_table = db.Table('association', User.metadata,
-    db.Column('student_id', db.Integer, db.ForeignKey('students.id')),
-    db.Column('teacher_id', db.Integer, db.ForeignKey('teachers.id')))
+                             db.Column('student_id', db.Integer, db.ForeignKey('students.id')),
+                             db.Column('teacher_id', db.Integer, db.ForeignKey('teachers.id')))
 
 
 class Student(User):
-    __tablename__ = "students"
-    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    teachers = db.relationship("Teacher", secondary=association_table)
-    def __repr__(self):
-        return f"('{self.username}', '{self.email}', '{self.password}')"
+	__tablename__ = "students"
+	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+	teachers = db.relationship("Teacher", secondary=association_table)
+	date_of_birth = db.Column(db.String)
+	first_name = db.Column(db.String)
+	last_name = db.Column(db.String)
+	parents_name = db.Column(db.String)
+	parents_phone = db.Column(db.String)
+
+	def __repr__(self):
+		return f"('{self.username}', '{self.email}', '{self.password}')"
 
 
 class Teacher(User):
-    __tablename__ = "teachers"
-    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    students = db.relationship("Student", secondary=association_table)
-    def __repr__(self):
-        return f"('{self.username}', '{self.email}', '{self.password}')"
+	__tablename__ = "teachers"
+	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+	students = db.relationship("Student", secondary=association_table)
+	first_name = db.Column(db.String)
+	last_name = db.Column(db.String)
+	university = db.Column(db.String)
+	subjects = db.Column(db.String)
+
+	def __repr__(self):
+		return f"('{self.username}', '{self.email}', '{self.password}')"
 
 
-class Admin (User):
-    __tablename__ = "Admins"
-    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+class Admin(User):
+	__tablename__ = "Admins"
+	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 
 
 db.create_all()
