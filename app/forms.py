@@ -22,8 +22,8 @@ class RegisterFormTeacher(FlaskForm):
 	first_name = StringField("First name", validators=[DataRequired(), Length(min=2, max=20)])
 	last_name = StringField("Last name", validators=[DataRequired(), Length(min=2, max=20)])
 	password = PasswordField('Password', validators=[DataRequired()])
+	confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
 	university = StringField('University', validators=[DataRequired()])
-	subjects = SelectField('Subjects', choices=["Biology", "Chemistry", "History"])
 	submit = SubmitField('Submit')
 
 
@@ -35,5 +35,5 @@ class RegisterFormStudent(FlaskForm):
 	last_name = StringField("Last name", validators=[DataRequired(), Length(min=2, max=20)])
 	parents_name = StringField("Parent's name", validators=[DataRequired(), Length(min=2, max=20)])
 	parents_phone = IntegerField("Parent's phone", validators=[DataRequired(), NumberRange(min=100000000, max=999999999,
-	  message=('Proszę wprowadź poprawny numer'))])
+		message='Proszę wprowadź poprawny numer')])
 	submit = SubmitField('Submit')

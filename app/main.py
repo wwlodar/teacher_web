@@ -16,7 +16,7 @@ def homepage():
 def login_user():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user and user.password == form.password.data:
             flask_login.login_user(user, remember=form.remember.data)
             return redirect(url_for('homepage'))
@@ -30,53 +30,3 @@ def logout():
     logout_user()
     return redirect(url_for('homepage'))
 
-
-@app.route('/admin', methods=['GET', 'POST'])
-def login_admin():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = Admin.query.filter_by(email=form.email.data).first()
-        if user:
-            if user.password == form.password.data:
-                flask_login.login_user(user)
-                return redirect(url_for('homepage'))
-            else:
-                flash("Not correct")
-        else:
-            flash("You are not administrator")
-            return redirect(url_for('homepage'))
-    return render_template('admin.html', title='Login', form=form)
-
-
-@app.route('/register_teacher')
-@is_admin()
-def register_teacher():
-    if current_user.is_authenticated:
-        return redirect(url_for('homepage'))
-    form = RegisterFormTeacher()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = Teacher(email=form.email.data, password=hashed_password, university=form.university.data,
-                       subjects=form.subjects.data, first_name=form.first_name.data, last_name=form.last_name.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("Account was added", "success")
-        return redirect(url_for('login_user'))
-    return render_template('register_teacher.html', title='Register', form=form)
-
-
-@app.route('/register_student')
-@is_admin()
-def register_student():
-    if current_user.is_authenticated:
-        return redirect(url_for('homepage'))
-    form = RegisterFormStudent()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = Student(email=form.email.data, password=hashed_password, first_name=form.first_name.data,
-                       last_name=form.last_name.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("Account was added", "success")
-        return redirect(url_for('login_user'))
-    return render_template('register_student.html', title='Register', form=form)

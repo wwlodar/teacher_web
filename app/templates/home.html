@@ -7,5 +7,10 @@
 </head>
 <body>
 Homepage
+<div>
+	{% for mesg in get_flashed_messages() %}
+	<h1>{{ mesg }}</h1>
+	{% endfor %}
+</div>
 </body>
 {% endblock content %}

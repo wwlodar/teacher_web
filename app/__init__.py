@@ -12,7 +12,7 @@ app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba544'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'login_user'
 login_manager.login_message_category = 'info'
 bcrypt = Bcrypt()
 csrf.init_app(app)
@@ -27,9 +27,9 @@ class User(db.Model, UserMixin):
 	password = db.Column(db.String(60), nullable=False)
 
 
-association_table = db.Table('association', User.metadata,
-                             db.Column('student_id', db.Integer, db.ForeignKey('students.id')),
-                             db.Column('teacher_id', db.Integer, db.ForeignKey('teachers.id')))
+association_table = db.Table('association',
+	User.metadata,db.Column('student_id', db.Integer, db.ForeignKey('students.id')),
+	db.Column('teacher_id', db.Integer, db.ForeignKey('teachers.id')))
 
 
 class Student(User):
@@ -43,7 +43,7 @@ class Student(User):
 	parents_phone = db.Column(db.String)
 
 	def __repr__(self):
-		return f"('{self.username}', '{self.email}', '{self.password}')"
+		return f"('{self.email}', '{self.password}')"
 
 
 class Teacher(User):
@@ -56,7 +56,7 @@ class Teacher(User):
 	subjects = db.Column(db.String)
 
 	def __repr__(self):
-		return f"('{self.username}', '{self.email}', '{self.password}')"
+		return f"('{self.email}', '{self.password}')"
 
 
 class Admin(User):
@@ -64,7 +64,4 @@ class Admin(User):
 	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 
 
-db.create_all()
-print(db.engine.table_names())
-
-from app import main
+from app import main, admin_routes
