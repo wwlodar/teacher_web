@@ -96,11 +96,11 @@
 			{{ form.submit(class="btn btn-outline-info") }}
 		</div>
 	</form>
+	{% for mesg in get_flashed_messages() %}
+		<h1>{{ mesg }}</h1>
+		{% endfor %}
 </fieldset>
 <div>
-	{% for mesg in get_flashed_messages() %}
-	<h1>{{ mesg }}</h1>
-	{% endfor %}
 </div>
 </body>
 </html>

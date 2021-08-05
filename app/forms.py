@@ -30,10 +30,22 @@ class RegisterFormTeacher(FlaskForm):
 class RegisterFormStudent(FlaskForm):
 	email = StringField('Email', validators=[DataRequired(), Email()])
 	password = PasswordField('Password', validators=[DataRequired()])
+	confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
 	date_of_birth = DateField('Date of birth', format='%Y-%m-%d')
 	first_name = StringField("First name", validators=[DataRequired(), Length(min=2, max=20)])
 	last_name = StringField("Last name", validators=[DataRequired(), Length(min=2, max=20)])
 	parents_name = StringField("Parent's name", validators=[DataRequired(), Length(min=2, max=20)])
-	parents_phone = IntegerField("Parent's phone", validators=[DataRequired(), NumberRange(min=100000000, max=999999999,
-		message='Proszę wprowadź poprawny numer')])
+	parents_phone = IntegerField("Parent's phone", validators=[DataRequired(), NumberRange(min=100000000, max=999999999,)])
+	submit = SubmitField('Submit')
+
+
+class AddNewClass(FlaskForm):
+	teacher_id = SelectField(coerce=int)
+	subject = SelectField("Subjects", choices=['Biology', 'Chemistry', 'History'])
+	submit = SubmitField('Submit')
+
+
+class AssignStudent(FlaskForm):
+	student_id = StringField()
+	classes_id = StringField()
 	submit = SubmitField('Submit')

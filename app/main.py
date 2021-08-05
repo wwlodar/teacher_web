@@ -14,10 +14,12 @@ def homepage():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_user():
+    if current_user.is_authenticated:
+        return redirect(url_for('homepage'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and user.password == form.password.data:
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
             flask_login.login_user(user, remember=form.remember.data)
             return redirect(url_for('homepage'))
         else:
@@ -30,3 +32,8 @@ def logout():
     logout_user()
     return redirect(url_for('homepage'))
 
+
+@app.route('/teachers')
+def teachers_page():
+    teachers = Teacher.query.all()
+    return render_template('teachers.html', teachers=teachers)

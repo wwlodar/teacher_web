@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
+<head>
+	<meta charset="UTF-8">
+	<title>Teachers</title>
+</head>
+<body>
+Our teachers:
+{% for t in teachers %}
+<a>{{t.first_name}}, {{t.last_name}}, {{t.university}}</a>
+{% endfor %}
+<div>
+	{% for mesg in get_flashed_messages() %}
+	<h1>{{ mesg }}</h1>
+	{% endfor %}
+</div>
+</body>
+{% endblock content %}

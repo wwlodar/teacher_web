@@ -6,8 +6,18 @@
 	<title>Panel administratora</title>
 </head>
 <body>
-<a class="btn btn-warning" href="register_teacher">Dodaj nauczyciela</a>
-<a class="btn btn-warning" href="register_student">Dodaj ucznia</a>
+		{% for mesg in get_flashed_messages() %}
+		<h1>{{ mesg }}</h1>
+		{% endfor %}
+		<div>
+		<a class="btn btn-warning" href="register_teacher">Add teacher</a>
+		</div>
+		<div>
+		<a class="btn btn-warning" href="register_student">Add student </a>
+	</div>
+		<div>
+		<a class="btn btn-warning" href="class_addition">Add class </a>
+	</div>
 </body>
 </html>
 {% endblock content %}
