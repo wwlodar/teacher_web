@@ -3,14 +3,33 @@
 {% block content %}
 <head>
 	<meta charset="UTF-8">
-	<title>Teachers</title>
+	<title>Add class</title>
 </head>
 <body>
-
-<div>
-	{% for mesg in get_flashed_messages() %}
-	<h1>{{ mesg }}</h1>
-	{% endfor %}
-</div>
+<form action='' method="post">
+	{{ form.csrf_token }}
+		<div>
+			{% for mesg in get_flashed_messages() %}
+			<h1>{{ mesg }}</h1>
+			{% endfor %}
+		</div>
+	<fieldset>
+		<div class="form-control">
+			<a>Teacher</a>
+			{{form.teacher_id}}
+		</div>
+			<div class="form-control">
+			<a>Subject</a>
+			{{form.subject}}
+			</div>
+			<div class="form-control">
+				<a>Weekday</a>
+			{{form.weekday}}
+			</div>
+		<div>
+			{{ form.submit(class="btn btn-outline-info") }}
+		</div>
+	</fieldset>
+</form>
 </body>
 {% endblock content %}

@@ -37,3 +37,9 @@ def logout():
 def teachers_page():
     teachers = Teacher.query.all()
     return render_template('teachers.html', teachers=teachers)
+
+@app.route('/profile')
+def my_profile():
+    if current_user.is_authenticated and current_user.email =="m@m.m":
+        return redirect(url_for('admin_panel'))
+    return render_template('profile.html')

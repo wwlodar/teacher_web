@@ -40,7 +40,8 @@ association_class_student_table = db.Table('association_class_student',
 class Student(User):
 	__tablename__ = "students"
 	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-	teachers = db.relationship("Teacher", secondary=association_teacher_student_table)
+	teachers = db.relationship("Teacher", secondary=association_teacher_student_table, backref=db.backref('students',
+	                                                                                                      lazy='dynamic'))
 	date_of_birth = db.Column(db.String)
 	first_name = db.Column(db.String)
 	last_name = db.Column(db.String)
@@ -54,7 +55,6 @@ class Student(User):
 class Teacher(User):
 	__tablename__ = "teachers"
 	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-	students = db.relationship("Student", secondary=association_teacher_student_table)
 	first_name = db.Column(db.String)
 	last_name = db.Column(db.String)
 	university = db.Column(db.String)
@@ -70,7 +70,8 @@ class Classes(db.Model):
 	weekday = db.Column(db.String)
 	subject = db.Column(db.String)
 	teacher_id = db.Column(db.ForeignKey('teachers.id'))
-	students = db.relationship("Student", secondary=association_class_student_table)
+	students = db.relationship("Student", secondary=association_class_student_table, backref=db.backref('classes_assigned',
+	                                                                                                      lazy='dynamic'))
 
 
 class Admin(User):

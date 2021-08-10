@@ -40,8 +40,9 @@ class RegisterFormStudent(FlaskForm):
 
 
 class AddNewClass(FlaskForm):
-	teacher_id = SelectField(coerce=int)
-	subject = SelectField("Subjects", choices=['Biology', 'Chemistry', 'History'])
+	teacher_id = SelectField(coerce=int, validators=[DataRequired()])
+	subject = SelectField("Subjects", choices=['Biology', 'Chemistry', 'History'], validators=[DataRequired()])
+	weekday = SelectField("Day of the class", choices=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], validators=[DataRequired()])
 	submit = SubmitField('Submit')
 
 

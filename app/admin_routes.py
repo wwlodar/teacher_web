@@ -33,7 +33,6 @@ def register_teacher():
 		if user:
 			flash("This email is already taken")
 		else:
-			print(form.errors)
 			hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 			user = Teacher(email=form.email.data, password=hashed_password, university=form.university.data,
 			               first_name=form.first_name.data, last_name=form.last_name.data)
@@ -55,8 +54,11 @@ def register_student():
 				flash("This email is already taken")
 			else:
 				hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-				user = Student(email=form.email.data, password=hashed_password, first_name=form.first_name.data,
-				               last_name=form.last_name.data, date_of_birth=form.date_of_birth.data,
+				user = Student(email=form.email.data,
+				               password=hashed_password,
+				               first_name=form.first_name.data,
+				               last_name=form.last_name.data,
+				               date_of_birth=form.date_of_birth.data,
 				               parents_name=form.parents_name.data,
 				               parents_phone=form.parents_phone.data)
 				db.session.add(user)
@@ -72,25 +74,29 @@ def admin_panel():
 	return render_template('admin_panel.html')
 
 
-@app.route('/class_addition')
+@app.route('/class_addition', methods=['GET', 'POST'])
 @is_admin()
 def add_class():
 	form = AddNewClass()
 	form.teacher_id.choices = [(t.id, t.first_name) for t in Teacher.query.all()]
+	print(form.errors)
 	if form.validate_on_submit():
-		classes = Classes(teacher_id=form.teacher_id.data, weekday=form.weekday.data)
+		classes = Classes(teacher_id=form.teacher_id.data, weekday=form.weekday.data, subject=form.subject.data)
 		db.session.add(classes)
 		db.session.commit()
-	return render_template('class_addition.html')
+		flash("Class was added", "success")
+		return redirect(url_for('admin_panel'))
+	return render_template('class_addition.html', form=form)
 
 
 @app.route('/student_class')
 @is_admin()
 def student_class():
 	form = AssignStudent()
+	form.student_id.choices = [(t.id, t.first_name) for t in Student.query.all()]
+	form.classes_id.choices = [(t.id, t.subject) for t in Classes.query.all()]
 	if form.validate_on_submit():
-		c = Classes()
-		s = Student()
-		c.students.append(s)
-		db.session.add(c)
+		student1 = Student(id=form.student_id.data)
+		class1 = Classes(id=form.classes_id.data)
+		student1.classes_assigned.append(class1)
 		db.session.commit()
