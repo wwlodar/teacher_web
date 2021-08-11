@@ -1,10 +1,10 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
-from app import app, db, bcrypt, Student, Teacher, Admin
+from app import app, db, bcrypt, Student, Teacher, Admin, Classes
 from app.forms import LoginForm, RegisterFormTeacher, RegisterFormStudent, User
 import flask_login
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.admin_decorator import is_admin
+import calendar
 
 
 @app.route('/')
@@ -40,6 +40,12 @@ def teachers_page():
 
 @app.route('/profile')
 def my_profile():
-    if current_user.is_authenticated and current_user.email =="m@m.m":
+    if current_user.is_authenticated and current_user == Admin.query.filter_by(email=current_user.email).first():
         return redirect(url_for('admin_panel'))
     return render_template('profile.html')
+
+
+@app.route('/schedule')
+def schedule_page():
+    weekdays = Classes.query.all()
+    return render_template('schedule.html', weekdays=weekdays)

@@ -1,10 +1,12 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from app import app, db, bcrypt, Student, Teacher, Admin, Classes
-from app.forms import LoginForm, RegisterFormTeacher, RegisterFormStudent, User, AddNewClass, AssignStudent
+from app.forms import LoginForm, RegisterFormTeacher, RegisterFormStudent, User, AddNewClass, AssignStudent, \
+	UpdateClass
 import flask_login
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.admin_decorator import is_admin
+import requests
 
 
 @app.route('/admin', methods=['GET', 'POST'])
@@ -68,20 +70,14 @@ def register_student():
 	return render_template('register_student.html', title='Register', form=form)
 
 
-@app.route('/admin_panel')
-@is_admin()
-def admin_panel():
-	return render_template('admin_panel.html')
-
-
 @app.route('/class_addition', methods=['GET', 'POST'])
 @is_admin()
 def add_class():
 	form = AddNewClass()
 	form.teacher_id.choices = [(t.id, t.first_name) for t in Teacher.query.all()]
-	print(form.errors)
 	if form.validate_on_submit():
-		classes = Classes(teacher_id=form.teacher_id.data, weekday=form.weekday.data, subject=form.subject.data)
+		classes = Classes(teacher_id=form.teacher_id.data, weekday=form.weekday.data, subject=form.subject.data,
+		                  hour=form.hour.data)
 		db.session.add(classes)
 		db.session.commit()
 		flash("Class was added", "success")
@@ -89,7 +85,7 @@ def add_class():
 	return render_template('class_addition.html', form=form)
 
 
-@app.route('/student_class')
+@app.route('/class_student')
 @is_admin()
 def student_class():
 	form = AssignStudent()
@@ -100,3 +96,29 @@ def student_class():
 		class1 = Classes(id=form.classes_id.data)
 		student1.classes_assigned.append(class1)
 		db.session.commit()
+	return render_template('class_student.html', form=form)
+
+
+@app.route('/admin_panel')
+@is_admin()
+def admin_panel():
+	return render_template('admin_panel.html')
+
+
+@app.route('/class_change', methods=['GET', 'POST'])
+@is_admin()
+def update_class():
+	class_id = request.args.get('class_id')
+	classes = Classes.query.filter_by(id=class_id).first()
+	print(classes)
+	form = UpdateClass()
+	form.teacher_id.choices = [(t.id, t.first_name) for t in Teacher.query.all()]
+	if form.validate_on_submit():
+		classes.teacher_id = form.teacher_id.data
+		classes.weekday = form.weekday.data
+		classes.subject = form.subject.data
+		classes.hour = form.hour.data
+		db.session.commit()
+		flash("Class was changed", "success")
+		return redirect(url_for('admin_panel'))
+	return render_template('class_change.html', form=form, classes=classes)

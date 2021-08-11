@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
+<head>
+	<meta charset="UTF-8">
+	<title>Teachers</title>
+</head>
+<body>
+Our classes:
+{% for t in weekdays %}
+<a>{{t.weekday}}, {{t.subject}}</a>
+{% endfor %}
+<div>
+	{% for mesg in get_flashed_messages() %}
+	<h1>{{ mesg }}</h1>
+	{% endfor %}
+</div>
+</body>
+{% endblock content %}

@@ -59,9 +59,10 @@ class Teacher(User):
 	last_name = db.Column(db.String)
 	university = db.Column(db.String)
 	subjects = db.Column(db.String)
+	major = db.Column(db.String)
 
 	def __repr__(self):
-		return f"('{self.email}', '{self.password}', '{self.first_name}')"
+		return f"('{self.email}', '{self.last_name}', '{self.first_name}')"
 
 
 class Classes(db.Model):
@@ -70,8 +71,11 @@ class Classes(db.Model):
 	weekday = db.Column(db.String)
 	subject = db.Column(db.String)
 	teacher_id = db.Column(db.ForeignKey('teachers.id'))
+	hour = db.Column(db.String)
 	students = db.relationship("Student", secondary=association_class_student_table, backref=db.backref('classes_assigned',
 	                                                                                                      lazy='dynamic'))
+	def __repr__(self):
+		return f"('{self.teacher_id}', '{self.weekday}', '{self.subject}')"
 
 
 class Admin(User):

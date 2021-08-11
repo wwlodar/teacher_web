@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
+<head>
+	<meta charset="UTF-8">
+	<title>Teachers</title>
+</head>
+<body>
+<form action='' method="post">
+	{{ form.csrf_token }}
+		Assign student to the class:
+		<div class="form-control">
+			<a>Student</a>
+			{{form.student_id}}
+		</div>
+			<div class="form-control">
+			<a>Subject</a>
+			{{form.classes_id}}
+			</div>
+	<div>
+	{% for mesg in get_flashed_messages() %}
+	<h1>{{ mesg }}</h1>
+	{% endfor %}
+	</div>
+</form>
+</body>
+{% endblock content %}

@@ -24,6 +24,7 @@ class RegisterFormTeacher(FlaskForm):
 	password = PasswordField('Password', validators=[DataRequired()])
 	confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
 	university = StringField('University', validators=[DataRequired()])
+	major = SelectField("Major", choices=['Biology', 'Chemistry', 'History'], validators=[DataRequired()])
 	submit = SubmitField('Submit')
 
 
@@ -43,10 +44,18 @@ class AddNewClass(FlaskForm):
 	teacher_id = SelectField(coerce=int, validators=[DataRequired()])
 	subject = SelectField("Subjects", choices=['Biology', 'Chemistry', 'History'], validators=[DataRequired()])
 	weekday = SelectField("Day of the class", choices=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], validators=[DataRequired()])
+	hour = SelectField("Time of class", choices=["4-5 p.m.", "5-6 p.m.", "6-7 p.m."])
 	submit = SubmitField('Submit')
 
 
 class AssignStudent(FlaskForm):
-	student_id = StringField()
-	classes_id = StringField()
+	student_id = SelectField(validators=[DataRequired()])
+	classes_id = SelectField(validators=[DataRequired()])
 	submit = SubmitField('Submit')
+
+class UpdateClass(FlaskForm):
+	teacher_id = SelectField(coerce=int, validators=[DataRequired()])
+	subject = SelectField("Subjects", choices=['Biology', 'Chemistry', 'History'], validators=[DataRequired()])
+	weekday = SelectField("Day of the class", choices=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], validators=[DataRequired()])
+	hour = SelectField("Time of class", choices=["4-5 p.m.", "5-6 p.m.", "6-7 p.m."])
+	submit = SubmitField('Update')

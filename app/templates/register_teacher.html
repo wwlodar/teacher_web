@@ -64,8 +64,10 @@
 		{{ form.university(class="form-control form-control-lg") }}
 		{% endif %}
 		</div>
-		<div>
-		</div>
+			<div class="form-control">
+			<a>Major</a>
+			{{form.major}}
+			</div>
 		<div class="form-group">
 			{{ form.password.label(class="form-control-label") }}
 			{% if form.password.errors %}
