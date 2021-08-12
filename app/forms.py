@@ -53,9 +53,15 @@ class AssignStudent(FlaskForm):
 	classes_id = SelectField(validators=[DataRequired()])
 	submit = SubmitField('Submit')
 
+
 class UpdateClass(FlaskForm):
 	teacher_id = SelectField(coerce=int, validators=[DataRequired()])
 	subject = SelectField("Subjects", choices=['Biology', 'Chemistry', 'History'], validators=[DataRequired()])
 	weekday = SelectField("Day of the class", choices=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], validators=[DataRequired()])
 	hour = SelectField("Time of class", choices=["4-5 p.m.", "5-6 p.m.", "6-7 p.m."])
+	submit = SubmitField('Update')
+
+
+class ChooseClass(FlaskForm):
+	class_id = SelectField(validators=[DataRequired()])
 	submit = SubmitField('Update')

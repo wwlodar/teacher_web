@@ -38,6 +38,7 @@ def teachers_page():
     teachers = Teacher.query.all()
     return render_template('teachers.html', teachers=teachers)
 
+
 @app.route('/profile')
 def my_profile():
     if current_user.is_authenticated and current_user == Admin.query.filter_by(email=current_user.email).first():

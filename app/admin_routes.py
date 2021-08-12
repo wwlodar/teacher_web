@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from app import app, db, bcrypt, Student, Teacher, Admin, Classes
 from app.forms import LoginForm, RegisterFormTeacher, RegisterFormStudent, User, AddNewClass, AssignStudent, \
-	UpdateClass
+	UpdateClass, ChooseClass
 import flask_login
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -36,8 +36,9 @@ def register_teacher():
 			flash("This email is already taken")
 		else:
 			hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-			user = Teacher(email=form.email.data, password=hashed_password, university=form.university.data,
-			               first_name=form.first_name.data, last_name=form.last_name.data)
+			user = Teacher(
+				email=form.email.data, password=hashed_password, university=form.university.data, major=form.major.data,
+				first_name=form.first_name.data, last_name=form.last_name.data)
 			db.session.add(user)
 			db.session.commit()
 			flash("Account was added", "success")
@@ -74,10 +75,11 @@ def register_student():
 @is_admin()
 def add_class():
 	form = AddNewClass()
-	form.teacher_id.choices = [(t.id, t.first_name) for t in Teacher.query.all()]
+	form.teacher_id.choices = [(t.id, (t.first_name + " " + t.last_name)) for t in Teacher.query.all()]
 	if form.validate_on_submit():
-		classes = Classes(teacher_id=form.teacher_id.data, weekday=form.weekday.data, subject=form.subject.data,
-		                  hour=form.hour.data)
+		classes = Classes(
+			teacher_id=form.teacher_id.data, weekday=form.weekday.data, subject=form.subject.data,
+			hour=form.hour.data)
 		db.session.add(classes)
 		db.session.commit()
 		flash("Class was added", "success")
@@ -85,24 +87,28 @@ def add_class():
 	return render_template('class_addition.html', form=form)
 
 
-@app.route('/class_student')
+@app.route('/class_student', methods=['GET', 'POST'])
 @is_admin()
 def student_class():
 	form = AssignStudent()
-	form.student_id.choices = [(t.id, t.first_name) for t in Student.query.all()]
-	form.classes_id.choices = [(t.id, t.subject) for t in Classes.query.all()]
+	form.student_id.choices = [(t.id, (t.first_name + " " + t.last_name)) for t in Student.query.all()]
+	form.classes_id.choices = [(t.id, (t.subject + " " + t.weekday + " " + t.hour)) for t in Classes.query.all()]
 	if form.validate_on_submit():
-		student1 = Student(id=form.student_id.data)
-		class1 = Classes(id=form.classes_id.data)
+		student1 = Student.query.filter_by(id=form.student_id.data).first()
+		class1 = Classes.query.filter_by(id=form.classes_id.data).first()
 		student1.classes_assigned.append(class1)
 		db.session.commit()
+		flash("Student was assigned", "success")
+		return redirect(url_for('admin_panel'))
 	return render_template('class_student.html', form=form)
 
 
 @app.route('/admin_panel')
 @is_admin()
 def admin_panel():
-	return render_template('admin_panel.html')
+	classes = Classes.query.all()
+	form = ChooseClass()
+	return render_template('admin_panel.html', form=form)
 
 
 @app.route('/class_change', methods=['GET', 'POST'])
@@ -110,9 +116,9 @@ def admin_panel():
 def update_class():
 	class_id = request.args.get('class_id')
 	classes = Classes.query.filter_by(id=class_id).first()
-	print(classes)
+	teacher = Teacher.query.filter_by(id=classes.teacher_id).first()
 	form = UpdateClass()
-	form.teacher_id.choices = [(t.id, t.first_name) for t in Teacher.query.all()]
+	form.teacher_id.choices = [(t.id, (t.first_name + " " + t.last_name)) for t in Teacher.query.all()]
 	if form.validate_on_submit():
 		classes.teacher_id = form.teacher_id.data
 		classes.weekday = form.weekday.data
@@ -121,4 +127,4 @@ def update_class():
 		db.session.commit()
 		flash("Class was changed", "success")
 		return redirect(url_for('admin_panel'))
-	return render_template('class_change.html', form=form, classes=classes)
+	return render_template('class_change.html', form=form, classes=classes, teacher=teacher)

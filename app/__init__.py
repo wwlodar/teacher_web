@@ -62,7 +62,7 @@ class Teacher(User):
 	major = db.Column(db.String)
 
 	def __repr__(self):
-		return f"('{self.email}', '{self.last_name}', '{self.first_name}')"
+		return f"('{self.email}', '{self.last_name}', '{self.major}')"
 
 
 class Classes(db.Model):

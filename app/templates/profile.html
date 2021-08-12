@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
+{% block content %}
 <head>
 	<meta charset="UTF-8">
-	<title>Title</title>
+	<title>Teachers</title>
 </head>
 <body>
-
+<div>
+	{% for mesg in get_flashed_messages() %}
+	<h1>{{ mesg }}</h1>
+	{% endfor %}
+</div>
 </body>
-</html>
+{% endblock content %}

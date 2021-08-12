@@ -8,6 +8,7 @@
 <body>
 <form action='' method="post">
 	{{ form.csrf_token }}
+	<div>Change class information</div>
 		<div>
 			{% for mesg in get_flashed_messages() %}
 			<h1>{{ mesg }}</h1>
@@ -16,7 +17,7 @@
 	<fieldset>
 		<div class="form-control">
 			<a>Teacher</a>
-			{{classes.teacher_id}} change to: {{form.teacher_id}}
+			{{teacher.first_name}} {{teacher.last_name}} change to: {{form.teacher_id}}
 		</div>
 			<div class="form-control">
 			<a>Subject</a>
@@ -35,5 +36,6 @@
 		</div>
 	</fieldset>
 </form>
+					<a class=" btn btn-outline-success float-end" href="admin_panel">Go back to admin panel</a>
 </body>
 {% endblock content %}
