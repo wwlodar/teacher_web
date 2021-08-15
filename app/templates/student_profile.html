@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
+<head>
+	<meta charset="UTF-8">
+	<title>Student</title>
+</head>
+<body>
+	<div>Your information:
+		<p>Name: {{student_data.first_name}}
+			{{student_data.last_name}}</p>
+		<p>Email: {{student_data.email}}</p>
+		<p>Date of birth: {{student_data.date_of_birth}}</p>
+		<p>Parent's name: {{student_data.parents_name}}</p>
+		<p>Parent's phone number: {{student_data.parents_phone}}</p>
+		<a class="btn btn-warning" href="change_student_form">Change your information </a>
+	</div>
+	<div><p> Your classes:</p>
+		<a>{% for item in classes %}</a>
+		<p>{{item}}</p>
+		{% endfor %}
+
+	</div>
+<div>
+	{% for mesg in get_flashed_messages() %}
+	<h1>{{ mesg }}</h1>
+	{% endfor %}
+</div>
+</body>
+{% endblock content %}

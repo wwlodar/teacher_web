@@ -22,7 +22,7 @@
 			{% endfor %}
 			</div>
 				{% else %}
-				{{ form.first_name(class="form-control form-control-lg") }}
+				{{ form.first_name(class="form-control form-control-lg", placeholder=student.first_name) }}
 				{% endif %}
 		</div>
 		<div class="form-group">
@@ -35,21 +35,8 @@
 			{% endfor %}
 			</div>
 				{% else %}
-				{{ form.last_name(class="form-control form-control-lg") }}
+				{{ form.last_name(class="form-control form-control-lg", placeholder=student.last_name) }}
 				{% endif %}
-		</div>
-		<div>
-				{{ form.email.label(class="form-control-label") }}
-				{% if form.email.errors %}
-				{{ form.email(class="form-control form-control-lg is-invalid") }}
-			<div class="invalid-feedback">
-				{% for error in form.email.errors %}
-				<span>{{ error }}</span>
-				{% endfor %}
-		</div>
-		{% else %}
-		{{ form.email(class="form-control form-control-lg") }}
-		{% endif %}
 		</div>
 		<div class="form-group">
 		{{ form.parents_name.label(class="form-control-label") }}
@@ -61,7 +48,7 @@
 			{% endfor %}
 		</div>
 		{% else %}
-		{{ form.parents_name(class="form-control form-control-lg") }}
+		{{ form.parents_name(class="form-control form-control-lg", placeholder=student.parents_name) }}
 		{% endif %}
 		</div>
 
@@ -75,7 +62,7 @@
 			{% endfor %}
 		</div>
 		{% else %}
-		{{ form.parents_phone(class="form-control form-control-lg") }}
+		{{ form.parents_phone(class="form-control form-control-lg", placeholder=student.parents_phone) }}
 		{% endif %}
 		</div>
 
@@ -89,36 +76,8 @@
 			{% endfor %}
 		</div>
 		{% else %}
-		{{ form.date_of_birth(class="form-control form-control-lg") }}
+		{{ form.date_of_birth(class="form-control form-control-lg", placeholder=student.date_of_birth) }}
 		{% endif %}
-		</div>
-		<div>
-		</div>
-		<div class="form-group">
-			{{ form.password.label(class="form-control-label") }}
-			{% if form.password.errors %}
-			{{ form.password(class="form-control form-control-lg is-invalid") }}
-			<div class="invalid-feedback">
-			{% for error in form.password.errors %}
-			<span>{{ error }}</span>
-			{% endfor %}
-			</div>
-			{% else %}
-			{{ form.password(class="form-control form-control-lg") }}
-			{% endif %}
-		</div>
-		<div class="form-group">
-			{{ form.confirm_password.label(class="form-control-label") }}
-			{% if form.confirm_password.errors %}
-			{{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
-			<div class="invalid-feedback">
-				{% for error in form.confirm_password.errors %}
-				<span>{{ error }}</span>
-				{% endfor %}
-			</div>
-			{% else %}
-			{{ form.confirm_password(class="form-control form-control-lg") }}
-			{% endif %}
 		</div>
 		<div>
 			{{ form.submit(class="btn btn-outline-info") }}
@@ -130,7 +89,7 @@
 </fieldset>
 <div>
 </div>
-<a class=" btn btn-outline-success float-end" href="admin_panel">Go back to admin panel</a>
+<a class=" btn btn-outline-success float-end" href="student_profile">Go back to admin panel</a>
 </body>
 </html>
 {% endblock content %}

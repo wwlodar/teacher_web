@@ -42,6 +42,7 @@ class Student(User):
 	id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 	teachers = db.relationship("Teacher", secondary=association_teacher_student_table, backref=db.backref('students',
 	                                                                                                      lazy='dynamic'))
+	classes = db.relationship("Classes", secondary=association_class_student_table, back_populates='students', lazy='dynamic')
 	date_of_birth = db.Column(db.String)
 	first_name = db.Column(db.String)
 	last_name = db.Column(db.String)
@@ -62,7 +63,7 @@ class Teacher(User):
 	major = db.Column(db.String)
 
 	def __repr__(self):
-		return f"('{self.email}', '{self.last_name}', '{self.major}')"
+		return f"('{self.email}', '{self.last_name}', '{self.first_name}')"
 
 
 class Classes(db.Model):
@@ -72,10 +73,12 @@ class Classes(db.Model):
 	subject = db.Column(db.String)
 	teacher_id = db.Column(db.ForeignKey('teachers.id'))
 	hour = db.Column(db.String)
-	students = db.relationship("Student", secondary=association_class_student_table, backref=db.backref('classes_assigned',
-	                                                                                                      lazy='dynamic'))
+	students = db.relationship("Student", secondary=association_class_student_table, back_populates='classes', lazy='dynamic')
 	def __repr__(self):
 		return f"('{self.teacher_id}', '{self.weekday}', '{self.subject}')"
+
+	def descri(self):
+		return f"('{self.weekday}')"
 
 
 class Admin(User):

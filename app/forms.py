@@ -63,5 +63,22 @@ class UpdateClass(FlaskForm):
 
 
 class ChooseClass(FlaskForm):
-	class_id = SelectField(validators=[DataRequired()])
+	classes_id = SelectField(validators=[DataRequired()])
 	submit = SubmitField('Update')
+
+
+class ChangeTeacherForm(FlaskForm):
+	first_name = StringField("First name", validators=[DataRequired(), Length(min=2, max=20)])
+	last_name = StringField("Last name", validators=[DataRequired(), Length(min=2, max=20)])
+	university = StringField('University', validators=[DataRequired()])
+	major = SelectField("Major", choices=['Biology', 'Chemistry', 'History'], validators=[DataRequired()])
+	submit = SubmitField('Update')
+
+
+class ChangeStudentForm(FlaskForm):
+	first_name = StringField("First name", validators=[DataRequired(), Length(min=2, max=20)])
+	last_name = StringField("Last name", validators=[DataRequired(), Length(min=2, max=20)])
+	date_of_birth = DateField('Date of birth', format='%Y-%m-%d')
+	parents_name = StringField("Parent's name", validators=[DataRequired(), Length(min=2, max=20)])
+	parents_phone = IntegerField("Parent's phone", validators=[DataRequired(), NumberRange(min=100000000, max=999999999,)])
+	submit = SubmitField('Submit')

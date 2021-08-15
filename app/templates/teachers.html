@@ -8,7 +8,7 @@
 <body>
 Our teachers:
 {% for t in teachers %}
-<p>{{t.first_name}}, {{t.last_name}}, {{t.university}}, {{t.major}}</p>
+<p>{{t.first_name}}, {{t.last_name}}, {{t.university}}, {{t.major}} major</p>
 {% endfor %}
 <div>
 	{% for mesg in get_flashed_messages() %}

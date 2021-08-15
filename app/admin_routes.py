@@ -96,7 +96,7 @@ def student_class():
 	if form.validate_on_submit():
 		student1 = Student.query.filter_by(id=form.student_id.data).first()
 		class1 = Classes.query.filter_by(id=form.classes_id.data).first()
-		student1.classes_assigned.append(class1)
+		student1.classes.append(class1)
 		db.session.commit()
 		flash("Student was assigned", "success")
 		return redirect(url_for('admin_panel'))
@@ -106,8 +106,8 @@ def student_class():
 @app.route('/admin_panel')
 @is_admin()
 def admin_panel():
-	classes = Classes.query.all()
 	form = ChooseClass()
+	form.classes_id.choices = [(t.id, (t.subject + " " + t.weekday + " " + t.hour)) for t in Classes.query.all()]
 	return render_template('admin_panel.html', form=form)
 
 

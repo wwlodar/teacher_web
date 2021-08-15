@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
+<head>
+	<meta charset="UTF-8">
+	<title>Teachers</title>
+</head>
+<body>
+	<div>Your information:
+		<p>Name: {{teacher_data.first_name}}
+			{{teacher_data.last_name}}</p>
+		<p>Email: {{teacher_data.email}}</p>
+		<p>Major: {{teacher_data.major}}</p>
+		<p>University: {{teacher_data.university}}</p>
+		<a class="btn btn-warning" href="change_teacher_form">Change your information </a>
+	</div>
+	<div><p> Your classes:</p>
+		<a>{% for item in classes %}</a>
+		<p>{{item}}</p>
+		{% endfor %}
+	</div>
+<div>
+	{% for mesg in get_flashed_messages() %}
+	<h1>{{ mesg }}</h1>
+	{% endfor %}
+</div>
+</body>
+{% endblock content %}
