@@ -1,13 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField, IntegerField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
-from app import db, login_manager
-from app import User
-
-
-@login_manager.user_loader
-def load_user(user_id):
-	return User.query.get(int(user_id))
+from wtforms.validators import DataRequired, Length, Email, EqualTo, NumberRange
 
 
 class LoginForm(FlaskForm):
@@ -66,19 +59,3 @@ class ChooseClass(FlaskForm):
 	classes_id = SelectField(validators=[DataRequired()])
 	submit = SubmitField('Update')
 
-
-class ChangeTeacherForm(FlaskForm):
-	first_name = StringField("First name", validators=[DataRequired(), Length(min=2, max=20)])
-	last_name = StringField("Last name", validators=[DataRequired(), Length(min=2, max=20)])
-	university = StringField('University', validators=[DataRequired()])
-	major = SelectField("Major", choices=['Biology', 'Chemistry', 'History'], validators=[DataRequired()])
-	submit = SubmitField('Update')
-
-
-class ChangeStudentForm(FlaskForm):
-	first_name = StringField("First name", validators=[DataRequired(), Length(min=2, max=20)])
-	last_name = StringField("Last name", validators=[DataRequired(), Length(min=2, max=20)])
-	date_of_birth = DateField('Date of birth', format='%Y-%m-%d')
-	parents_name = StringField("Parent's name", validators=[DataRequired(), Length(min=2, max=20)])
-	parents_phone = IntegerField("Parent's phone", validators=[DataRequired(), NumberRange(min=100000000, max=999999999,)])
-	submit = SubmitField('Submit')

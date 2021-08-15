@@ -1,12 +1,14 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
-from app import app, db, bcrypt, Student, Teacher, Admin, Classes
-from app.forms import LoginForm, RegisterFormTeacher, RegisterFormStudent, User, AddNewClass, AssignStudent, \
+from app.models import db, Student, Teacher, Admin, Classes
+from app import bcrypt, app
+from app.admin.forms import RegisterFormTeacher, RegisterFormStudent, AddNewClass, AssignStudent, \
 	UpdateClass, ChooseClass
+from app.admin.forms import LoginForm
 import flask_login
-from flask_login import login_user, current_user, logout_user, login_required
-from werkzeug.security import generate_password_hash, check_password_hash
-from app.admin_decorator import is_admin
-import requests
+from flask_login import current_user
+from app.admin.admin_decorator import is_admin
+
+admin = Blueprint('admin', __name__)
 
 
 @app.route('/admin', methods=['GET', 'POST'])
@@ -22,7 +24,7 @@ def login_admin():
 				flash("Not correct")
 		else:
 			flash("You are not administrator")
-			return redirect(url_for('homepage'))
+			return redirect(url_for('main.homepage'))
 	return render_template('admin.html', title='Login', form=form)
 
 
@@ -42,7 +44,7 @@ def register_teacher():
 			db.session.add(user)
 			db.session.commit()
 			flash("Account was added", "success")
-			return redirect(url_for('admin_panel'))
+			return redirect(url_for('admin.admin_panel'))
 	return render_template('register_teacher.html', title='Register', form=form)
 
 
@@ -114,8 +116,9 @@ def admin_panel():
 @app.route('/class_change', methods=['GET', 'POST'])
 @is_admin()
 def update_class():
-	class_id = request.args.get('class_id')
-	classes = Classes.query.filter_by(id=class_id).first()
+	classes_id = request.values.get('classes_id')
+	print(classes_id)
+	classes = Classes.query.filter_by(id=classes_id).first()
 	teacher = Teacher.query.filter_by(id=classes.teacher_id).first()
 	form = UpdateClass()
 	form.teacher_id.choices = [(t.id, (t.first_name + " " + t.last_name)) for t in Teacher.query.all()]
