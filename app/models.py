@@ -76,5 +76,3 @@ class Admin(User):
   id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 
 
-db.create_all()
-print(db.engine.table_names())

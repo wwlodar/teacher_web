@@ -1,9 +1,8 @@
 from flask import render_template, url_for, flash, redirect, Blueprint
-from app import app, db, bcrypt
-from app.models import Student, User
+from app import db, bcrypt
 from app.student.forms import ChangeStudentForm
-import flask_login
 from flask_login import current_user, logout_user, login_required
+from app.models import Student
 
 student = Blueprint('student', __name__)
 

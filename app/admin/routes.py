@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from app.models import db, Student, Teacher, Admin, Classes
-from app import bcrypt, app
+from app import bcrypt
 from app.admin.forms import RegisterFormTeacher, RegisterFormStudent, AddNewClass, AssignStudent, \
 	UpdateClass, ChooseClass
 from app.admin.forms import LoginForm
@@ -11,7 +11,7 @@ from app.admin.admin_decorator import is_admin
 admin = Blueprint('admin', __name__)
 
 
-@app.route('/admin', methods=['GET', 'POST'])
+@admin.route('/admin', methods=['GET', 'POST'])
 def login_admin():
 	form = LoginForm()
 	if form.validate_on_submit():
@@ -28,7 +28,7 @@ def login_admin():
 	return render_template('admin.html', title='Login', form=form)
 
 
-@app.route('/register_teacher', methods=['GET', 'POST'])
+@admin.route('/register_teacher', methods=['GET', 'POST'])
 @is_admin()
 def register_teacher():
 	form = RegisterFormTeacher()
@@ -48,7 +48,7 @@ def register_teacher():
 	return render_template('register_teacher.html', title='Register', form=form)
 
 
-@app.route('/register_student', methods=['GET', 'POST'])
+@admin.route('/register_student', methods=['GET', 'POST'])
 @is_admin()
 def register_student():
 	if current_user.is_authenticated:
@@ -73,7 +73,7 @@ def register_student():
 	return render_template('register_student.html', title='Register', form=form)
 
 
-@app.route('/class_addition', methods=['GET', 'POST'])
+@admin.route('/class_addition', methods=['GET', 'POST'])
 @is_admin()
 def add_class():
 	form = AddNewClass()
@@ -89,7 +89,7 @@ def add_class():
 	return render_template('class_addition.html', form=form)
 
 
-@app.route('/class_student', methods=['GET', 'POST'])
+@admin.route('/class_student', methods=['GET', 'POST'])
 @is_admin()
 def student_class():
 	form = AssignStudent()
@@ -105,7 +105,7 @@ def student_class():
 	return render_template('class_student.html', form=form)
 
 
-@app.route('/admin_panel')
+@admin.route('/admin_panel')
 @is_admin()
 def admin_panel():
 	form = ChooseClass()
@@ -113,7 +113,7 @@ def admin_panel():
 	return render_template('admin_panel.html', form=form)
 
 
-@app.route('/class_change', methods=['GET', 'POST'])
+@admin.route('/class_change', methods=['GET', 'POST'])
 @is_admin()
 def update_class():
 	classes_id = request.values.get('classes_id')

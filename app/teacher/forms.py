@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length
+from flask_login import current_user
 
 
 class ChangeTeacherForm(FlaskForm):

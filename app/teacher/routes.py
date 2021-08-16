@@ -1,9 +1,10 @@
 from flask import render_template, url_for, flash, redirect, Blueprint
-from app.models import db, Teacher, Classes, User
+from app import db, bcrypt
+from app.models import Teacher, Classes
 from app.teacher.forms import ChangeTeacherForm
-from app import bcrypt, app
-from flask_login import current_user, logout_user, login_required
-import flask_login
+
+from flask_login import current_user, login_required
+
 
 teacher = Blueprint('teacher', __name__)
 
