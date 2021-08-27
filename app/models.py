@@ -74,5 +74,3 @@ class Classes(db.Model):
 class Admin(User):
   __tablename__ = "Admins"
   id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-
-
