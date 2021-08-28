@@ -4,7 +4,6 @@ from app.models import Teacher, Classes, Admin, User
 from app.main.forms import LoginForm
 import flask_login
 from flask_login import current_user, logout_user, login_required
-
 main = Blueprint('main', __name__)
 
 

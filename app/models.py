@@ -1,5 +1,5 @@
-from app import db, login_manager
 from flask_login import UserMixin
+from .extensions import db, login_manager
 
 
 @login_manager.user_loader
@@ -67,10 +67,8 @@ class Classes(db.Model):
   def __repr__(self):
     return f"('{self.teacher_id}', '{self.weekday}', '{self.subject}')"
 
-  def descri(self):
-    return f"('{self.weekday}')"
-
 
 class Admin(User):
   __tablename__ = "Admins"
   id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+

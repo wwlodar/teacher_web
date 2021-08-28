@@ -1,27 +1,23 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from flask_bcrypt import Bcrypt
-from flask_wtf.csrf import CSRFProtect
 from app.Config import Config
+from .extensions import (
+  bcrypt,
+  db,
+  login_manager,
+  csrf
+)
 
-db = SQLAlchemy()
-csrf = CSRFProtect()
-bcrypt = Bcrypt()
 
-login_manager = LoginManager()
-login_manager.login_view = 'login_user'
-login_manager.login_message_category = 'info'
+def register_extensions(app):
+  db.init_app(app)
+  csrf.init_app(app)
+  bcrypt.init_app(app)
+  login_manager.init_app(app)
 
 
 def create_app(config_class=Config):
   app = Flask(__name__, template_folder='templates')
   app.config.from_object(Config)
-
-  db.init_app(app)
-  csrf.init_app(app)
-  bcrypt.init_app(app)
-  login_manager.init_app(app)
 
   from app.student.routes import student
   from app.main.routes import main
@@ -31,8 +27,10 @@ def create_app(config_class=Config):
   app.register_blueprint(teacher)
   app.register_blueprint(main)
   app.register_blueprint(admin)
-  app.app_context().push()
-  db.create_all()
+  register_extensions(app)
+  with app.app_context():
+    db.create_all()
+    print(db.engine.table_names())
   return app
 
 

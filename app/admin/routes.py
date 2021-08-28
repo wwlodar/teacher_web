@@ -19,7 +19,7 @@ def login_admin():
 		if user:
 			if user.password == form.password.data:
 				flask_login.login_user(user)
-				return redirect(url_for('admin_panel'))
+				return redirect(url_for('admin.admin_panel'))
 			else:
 				flash("Not correct")
 		else:
@@ -69,7 +69,7 @@ def register_student():
 				db.session.add(user)
 				db.session.commit()
 				flash("Account was added", "success")
-				return redirect(url_for('admin_panel'))
+				return redirect(url_for('admin.admin_panel'))
 	return render_template('register_student.html', title='Register', form=form)
 
 
@@ -85,7 +85,7 @@ def add_class():
 		db.session.add(classes)
 		db.session.commit()
 		flash("Class was added", "success")
-		return redirect(url_for('admin_panel'))
+		return redirect(url_for('admin.admin_panel'))
 	return render_template('class_addition.html', form=form)
 
 
@@ -101,7 +101,7 @@ def student_class():
 		student1.classes.append(class1)
 		db.session.commit()
 		flash("Student was assigned", "success")
-		return redirect(url_for('admin_panel'))
+		return redirect(url_for('admin.admin_panel'))
 	return render_template('class_student.html', form=form)
 
 
@@ -129,5 +129,5 @@ def update_class():
 		classes.hour = form.hour.data
 		db.session.commit()
 		flash("Class was changed", "success")
-		return redirect(url_for('admin_panel'))
+		return redirect(url_for('admin.admin_panel'))
 	return render_template('class_change.html', form=form, classes=classes, teacher=teacher)
